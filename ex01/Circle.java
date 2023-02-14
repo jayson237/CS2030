@@ -16,6 +16,5 @@ class Circle {
     public String toString() {
         return "circle of radius " + this.radius + 
             " centred at " + this.centre;
-    }
-  
+    } 
 }
