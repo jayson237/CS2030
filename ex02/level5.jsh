@@ -10,24 +10,41 @@ ImList<Service> serveCruises(ImList<Cruise> cruises) {
         if (!active.isEmpty()) {
             for (Service s: active) {
                 int index = active.indexOf(s);
-                if (cruise.getArrivalTime() >= active.get(index).getServiceEndTime()) {
-                    expired = expired.add(active.get(index));
+                Service service = active.get(index);
+                if (cruise.getArrivalTime() >= service.getServiceEndTime()) {
+                    expired = expired.add(service);
                     active = active.remove(index);
                 }
             }
         } 
         while (loadersNeeded > 0) {
             if (expired.isEmpty()) {
-                active = active.add(new Service(new Loader(loaderNum), cruise));
-                served = served.add(new Service(new Loader(loaderNum), cruise));
-                loadersNeeded -= 1;
-                loaderNum += 1;
+                if (loaderNum % 3 != 0) {
+                    active = active.add(new Service(new Loader(loaderNum), cruise));
+                    served = served.add(new Service(new Loader(loaderNum), cruise));
+                    loadersNeeded -= 1;
+                    loaderNum += 1;
+                } else {
+                    Service recycledService = new RecycledService(new RecycledLoader(loaderNum), cruise);
+                    active = active.add(recycledService);
+                    served = served.add(recycledService);
+                    loadersNeeded -= 1;
+                    loaderNum += 1;
+                }
             } else {
-                int existingLoader = expired.get(0).getLoaderNum(); 
-                active = active.add(new Service(new Loader(existingLoader), cruise));
-                served = served.add(new Service(new Loader(existingLoader), cruise));
-                expired = expired.remove(0);
-                loadersNeeded -= 1;
+                int existingLoader = expired.get(0).getLoaderNum();
+                if (existingLoader % 3 != 0) {
+                    active = active.add(new Service(new Loader(existingLoader), cruise));
+                    served = served.add(new Service(new Loader(existingLoader), cruise));
+                    expired = expired.remove(0);
+                    loadersNeeded -= 1;
+                } else {
+                    Service recycledServices = new RecycledService(new RecycledLoader(existingLoader), cruise);
+                    active = active.add(recycledServices);
+                    served = served.add(recycledServices);
+                    expired = expired.remove(0);
+                    loadersNeeded -= 1;
+                }
             }
         }
     }
