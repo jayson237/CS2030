@@ -4,9 +4,8 @@ class Serve extends Event {
     }
 
     @Override
-    public Event execute() {
-        return new Done(super.getDoneTime(),super.getCustomer(),
-                new Server(super.getDoneTime(), super.getServer().getServerId()));
+    public Event execute(int server) {
+        return new Done(super.getDoneTime(),super.getCustomer(), new Server(super.getDoneTime(), super.getServer().getServerId()));
     }
 
     @Override

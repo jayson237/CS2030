@@ -47,53 +47,40 @@ class Simulator {
 
     private PQ<Event> initEvents() {
         PQ<Event> eventTemp = new PQ<Event>(new EventComparator());
-        ImList<Server> serverTemp = this.initServers(this.numOfServers);
+        Server tempServer = new Server(0.0, -1);
         for (int i = 0; i < this.arrival.size(); i++) {
-            Server tempServer = new Server(0.0, -1);
             double arrTime = this.arrival.get(i);
             Customer customer = this.customers.get(i);
-            Server available = this.findAvailableServer(arrTime, serverTemp);
-            if (available.getServerId() != -1) {
-                Server newServer = available.update(customer);
-                serverTemp = this.updateServerList(serverTemp, available, newServer);
-                tempServer = available;
-            }
             eventTemp = eventTemp.add(new Arrive(arrTime, customer, tempServer));
         }
         return eventTemp;
     }
 
-    public String counter() {
-        int servedCustomer = 0;
-        ImList<Server> serverTemp = this.initServers(this.numOfServers);
-        for (int i = 0; i < this.arrival.size(); i++) {
-            Customer customer = this.customers.get(i);
-            double arrivalTime = customer.getArrival();
-            Server availServer = this.findAvailableServer(arrivalTime, serverTemp);
-            if (availServer.getServerId() != -1) {
-                servedCustomer++;
-                Server newServer = availServer.update(customer);
-                serverTemp = this.updateServerList(serverTemp, availServer, newServer);
-            }
-        }
-        int notServedCustomer = this.arrival.size() - servedCustomer;
-        return String.format("[%d %d]", servedCustomer, notServedCustomer);
-    }
-
-
     public String simulate() {
         String output = "";
+        int servedCustomer = 0;
         PQ<Event> events = this.initEvents();
+        ImList<Server> serverTemp = this.initServers(this.numOfServers);
         while (!events.isEmpty()) {
             Pair<Event, PQ<Event>> eventPair = events.poll();
             Event currEvent = eventPair.first();
+            Server availServer = this.findAvailableServer(currEvent.getTime(), serverTemp);
+            if (currEvent.getType() == 1) {
+                if (availServer.getServerId() != -1) {
+                    servedCustomer++;
+                    Server newServer = availServer.update(currEvent.getCustomer());
+                    serverTemp = this.updateServerList(serverTemp, availServer, newServer);
+                } 
+            }
             events = eventPair.second();
             output += currEvent.toString();
-            if (currEvent.execute() != currEvent) {
-                events = events.add(currEvent.execute());
+            if (currEvent.execute(availServer.getServerId()) != currEvent) {
+                events = events.add(currEvent.execute(availServer.getServerId()));
             }
         }
-        return output + this.counter();
+        int notServedCustomer = this.arrival.size() - servedCustomer;
+        String counter = String.format("[%d %d]", servedCustomer, notServedCustomer);
+        return output + counter;
     }
 }
 

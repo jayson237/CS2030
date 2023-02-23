@@ -4,7 +4,7 @@ class Done extends Event {
     }
 
     @Override
-    public Event execute() {
+    public Event execute(int server) {
         return this;
     }
 

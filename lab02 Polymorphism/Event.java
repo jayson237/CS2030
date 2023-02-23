@@ -10,6 +10,10 @@ abstract class Event {
         this.server = server;
     }
 
+    public int getType() {
+        return 0;
+    }
+
     public double getTime() {
         return this.time;
     }
@@ -30,7 +34,7 @@ abstract class Event {
         return this.customer.getId();
     }
 
-    abstract Event execute();
+    abstract Event execute(int server);
 
     @Override
     public String toString() {
