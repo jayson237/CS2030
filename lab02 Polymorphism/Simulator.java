@@ -65,12 +65,10 @@ class Simulator {
             Pair<Event, PQ<Event>> eventPair = events.poll();
             Event currEvent = eventPair.first();
             Server availServer = this.findAvailableServer(currEvent.getTime(), serverTemp);
-            if (currEvent.getType() == 1) {
-                if (availServer.getServerId() != -1) {
-                    servedCustomer++;
-                    Server newServer = availServer.update(currEvent.getCustomer());
-                    serverTemp = this.updateServerList(serverTemp, availServer, newServer);
-                } 
+            if (currEvent.getType() == 1 && availServer.getServerId() != -1) {
+                servedCustomer++;
+                Server newServer = availServer.update(currEvent.getCustomer());
+                serverTemp = this.updateServerList(serverTemp, availServer, newServer);
             }
             events = eventPair.second();
             output += currEvent.toString();
