@@ -4,7 +4,7 @@ class TermAgent extends Term {
         super(identifier);
     }
     
-    public Host snd(CompletedHost host) {
+    public SndHost snd(CompletedHost host) {
         return new SndHost(host, this);
     }
 }
