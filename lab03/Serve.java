@@ -8,7 +8,7 @@ class Serve extends Event {
     Pair<Event, ImList<Server>> execute(int server, int queue, ImList<Server> servers) {
         servers = servers.set(server - 1, new Server(super.getTime() +
                 super.getCustomer().getService(), server));
-        if (super.getQueue().size() > 0 && ) {
+        if (super.getQueue().size() > 0) {
             double serviceTime = super.getQueue().get(0).getService();
             double currTime = super.getTime();
             Server currServer = servers.get(server - 1);
