@@ -5,7 +5,7 @@ class Booking implements Comparable<Booking> {
     private final Request request;
     private final Service serviceType;
     private final double fare;
-    private static final double centToDollar = 100.0;
+    private static final double centToDollar = 100;
 
     Booking(Driver driver, Request request) {
         this(driver, request, request.getCheapestService(driver), request.getCheapestFare(driver));
