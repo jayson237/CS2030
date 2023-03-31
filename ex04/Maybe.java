@@ -69,14 +69,6 @@ class Maybe<T> {
         } 
     }
 
-    Maybe<T> or(Supplier<? extends Maybe<? extends T>> supplier) {
-        if (value != null) {
-            return this;
-        }
-        Maybe<? extends T> result = supplier.get();
-        return Maybe.<T>of(result.value);
-    }
-
     T orElse(T other) {
         if (this.value == null) {
             return other;
@@ -86,6 +78,14 @@ class Maybe<T> {
 
     T orElseGet(Supplier<? extends T> supplier) {
         return orElse(supplier.get());
+    }
+    
+    Maybe<T> or(Supplier<? extends Maybe<? extends T>> supplier) {
+        if (value != null) {
+            return this;
+        }
+        Maybe<? extends T> result = supplier.get();
+        return Maybe.<T>of(result.value);
     }
     
     @Override
