@@ -87,9 +87,7 @@ class Maybe<T> {
     T orElseGet(Supplier<? extends T> supplier) {
         return orElse(supplier.get());
     }
-
     
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
