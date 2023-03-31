@@ -3,7 +3,7 @@ import java.lang.Runnable;
 import java.util.function.Predicate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
+// Optional of CS2030
 class Maybe<T> {
     private final T object;
 
